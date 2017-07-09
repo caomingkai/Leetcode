@@ -30,4 +30,36 @@ public class Solution {
     
 }
 
+// version 2: HashMap / HashSet / Stack
+// 1- hashmap ( Node : Parent_Node) => O(1) retieve time & Find a way BACK to root!!!!
+// 2- Hashset ( store set of node) => even though value might be the same, the left/right child are different
+// 3- Stack => used to make BFS traversal, until HashMap contains both the p&q 
+public class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        Map<TreeNode, TreeNode> parent = new HashMap<>();
+        Deque<TreeNode> stack = new ArrayDeque<>();
+        parent.put(root, null);
+        stack.push(root);
+
+        while (!parent.containsKey(p) || !parent.containsKey(q)) {
+            TreeNode node = stack.pop();
+            if (node.left != null) {
+                parent.put(node.left, node);
+                stack.push(node.left);
+            }
+            if (node.right != null) {
+                parent.put(node.right, node);
+                stack.push(node.right);
+            }
+        }
+        Set<TreeNode> ancestors = new HashSet<>();
+        while (p != null) {
+            ancestors.add(p);
+            p = parent.get(p);
+        }
+        while (!ancestors.contains(q))
+            q = parent.get(q);
+        return q;
+    }
+}
 
