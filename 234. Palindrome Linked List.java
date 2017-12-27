@@ -6,6 +6,9 @@
  *     ListNode(int x) { val = x; }
  * }
  */
+
+/*
+// version 1: not so good
 public class Solution {
     public boolean isPalindrome(ListNode head) {
         ArrayList<Integer> arr = new ArrayList<>();
@@ -27,38 +30,44 @@ public class Solution {
     }
 }
 
-/*
-// 
-public boolean isPalindrome(ListNode head) {
-    ListNode fast = head, slow = head;
-    while (fast != null && fast.next != null) {
-        fast = fast.next.next;
-        slow = slow.next;
-    }
-    if (fast != null) { // odd nodes: let right half smaller
-        slow = slow.next;
-    }
-    slow = reverse(slow);
-    fast = head;
-    
-    while (slow != null) {
-        if (fast.val != slow.val) {
-            return false;
-        }
-        fast = fast.next;
-        slow = slow.next;
-    }
-    return true;
-}
-
-public ListNode reverse(ListNode head) {
-    ListNode prev = null;
-    while (head != null) {
-        ListNode next = head.next;
-        head.next = prev;
-        prev = head;
-        head = next;
-    }
-    return prev;
-}
 */
+// version 2
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean isPalindrome(ListNode head) {
+        ListNode fast = head;
+        ListNode slow = head;
+
+        while(fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        if(fast != null) slow = slow.next;
+
+        slow = reverse(slow);
+        while(slow != null && head.val == slow.val) {
+            head = head.next;
+            slow = slow.next;
+        }
+        
+        return slow == null;
+    }
+
+    private ListNode reverse(ListNode head) {
+        ListNode prev = null;
+        while(head != null) {
+            ListNode next = head.next;
+            head.next = prev;
+            prev = head;
+            head = next;
+        }
+        return prev;
+    }
+}
