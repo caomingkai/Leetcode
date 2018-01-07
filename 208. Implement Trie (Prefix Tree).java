@@ -4,6 +4,7 @@
 class Trie {
     class TrieNode{
         boolean isWord;
+        int childrenNum;   // denote: from this Node on, carrying how many words
         TrieNode[] children = new TrieNode[26];
         public TrieNode(){ }
     }
@@ -22,7 +23,7 @@ class Trie {
             char c = word.charAt(i);
             if( curNode.children[ c-'a'] == null )
                 curNode.children[ c-'a'] = new TrieNode();
-            
+            curNode.childrenNum++;
             curNode = curNode.children[ c-'a'];
         }
         curNode.isWord = true;
@@ -50,6 +51,28 @@ class Trie {
             curNode = curNode.children[c-'a'];
         }
         return curNode != null;
+    }
+    
+    
+    public boolean delete( String word ){
+        if( !search(word) )
+            return false;
+        
+        TrieNode curNode = root;
+        for( int i=0; i<word.length(); i++ ){
+            char c = word.charAt(i);
+            if( curNode.children[c-'a'].childrenNum == 1 ){
+                curNode.children[c-'a'] = null;
+                return true;
+            }else{
+                curNode.childrenNum--;
+                curNode = curNode.children[c-'a']; 
+            }
+        }
+        
+        // here means: the last char of word has trailing Nodes, BUT itself has to set 'isEnd=false'
+        curNode.isWord = false;
+        return true;
     }
 }
 
