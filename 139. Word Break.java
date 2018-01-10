@@ -1,116 +1,116 @@
-/*
-// version 1: DP
-// s: 0 ~ l-1
-// f(0,l-1) = dict.contains(0,l-1) || f(0,i)&&dict.contains(i,l-1) || f(0,i+1)&&dict.contains(i+1,l-1) || .....
-// if s(0,l-1) returns true, e.g. s = ' a b c d e '
-// for its fisrt char 'e' , it at most exists in all the following forms:
-// 'e'   ,   'de'   ,   'cde'   ,   'bcde'   ,   'abcde'
-// for each, we only need to check its prefix return true or not
-
 class Solution {
-    
-    Set<String> dict;
-    Map<String, Boolean> memo =  new HashMap<>();
-    
+
+ /*   
+    // version 1: BFS
     public boolean wordBreak(String s, List<String> wordDict) {
-        dict = new HashSet<>(wordDict);
-        int l = s.length();
-        
-        // edge case
-        if( l == 1 ) return dict.contains(s);
-        
-        // general case
-        return DP( s, 0, l );
-    }
-    
-    
-    private boolean DP( String s, int lo, int hi ){
-        
-        boolean res = dict.contains(s.substring(lo,hi));
-        
-        // base case
-        if( lo+1 == hi ){
-            memo.put( s.substring(lo,hi), res );
-            return res;
-        } 
-        
-        // recursion case
-        for( int i = lo+1; i < hi; i++ ){
-            String formerS = s.substring(lo,i);
-            String latterS = s.substring(i,hi);
-            boolean formerRes = false;
-            boolean latterRes = false;
-            
-            if( memo.containsKey(formerS) )
-                formerRes = memo.get(formerS);
-            else{
-                formerRes = DP( s, lo, i);
-                memo.put( formerS, formerRes );
+        Set<String> wordDictSet=new HashSet(wordDict);
+        Queue<Integer> queue = new LinkedList<>();
+        int[] visited = new int[s.length()];
+        queue.add(0);
+        while (!queue.isEmpty()) {
+            int start = queue.remove();
+            if (visited[start] == 0) {
+                for (int end = start + 1; end <= s.length(); end++) {
+                    if (wordDictSet.contains(s.substring(start, end))) {
+                        queue.add(end);
+                        if (end == s.length()) {
+                            return true;
+                        }
+                    }
+                }
+                visited[start] = 1;
             }
-            latterRes = dict.contains(latterS);
-
-            res = res || (formerRes && latterRes);
         }
-
-        return res;
+        return false;
     }
-}
 */
-
-//version2: DP
-// NO NEED FOR HashMap!!
-// s: 0 ~ l-1
-// f(0,l-1) = dict.contains(0,l-1) || f(0,i)&&dict.contains(i,l-1) || f(0,i+1)&&dict.contains(i+1,l-1) || .....
-// if s(0,l-1) returns true, e.g. s = ' a b c d e '
-// for its fisrt char 'e' , it at most exists in all the following forms:
-// 'e'   ,   'de'   ,   'cde'   ,   'bcde'   ,   'abcde'
-// for each, we only need to check its prefix return true or not
-
-class Solution {
     
-    Set<String> dict;
-    ArrayList<Boolean> memo;
+    // version 2 : DP - based on version 1
     public boolean wordBreak(String s, List<String> wordDict) {
-        int l = s.length();
-        dict = new HashSet<>(wordDict);
-        memo = new ArrayList<>();
-        
-        // edge case
-        if( l == 1 ) return dict.contains(s);
-        
-        // general case
-        return DP( s, l );
-    }
-    
-    
-    private boolean DP( String s, int index ){
-        
-        boolean res = dict.contains(s.substring(0,index));
-        
-        // base case
-        if(  index == 1 ){
-            memo.add(res);
-            return res;
-        } 
-        
-        // recursion case
-        for( int i = 1; i < index; i++ ){
-            String formerS = s.substring(0,i);
-            String latterS = s.substring(i,index);
-            boolean formerRes = false;
-            boolean latterRes = false;
-            
-            if( i < memo.size() )
-                formerRes = memo.get(i);
-            else{
-                formerRes = DP( s, i);
-                memo.add( formerRes );
+        Set<String> wordDictSet=new HashSet(wordDict);
+        boolean[] dp = new boolean[s.length() + 1];
+        dp[0] = true;
+        for (int i = 1; i <= s.length(); i++) {
+            for (int j = 0; j < i; j++) {
+                if (dp[j] && wordDictSet.contains(s.substring(j, i))) {
+                    dp[i] = true;
+                    break;
+                }
             }
-            latterRes = dict.contains(latterS);
-
-            res = res || (formerRes && latterRes);
         }
-
-        return res;
+        return dp[s.length()];
     }
+    /*
+    // version 3: using visited value, avoid duplicate visit
+    public boolean wordBreak(String s, List<String> wordDict) {
+
+        HashSet<String> dict = new HashSet<>(wordDict);
+        if( dict.contains(s) )
+            return true;
+
+        
+        int l = s.length();
+        boolean[] existMap= new boolean[l+1]; // contain former i letters, if or not can be segmented into a dictionary sequence 
+        existMap[0] = true;
+        
+        for( int i = 1; i < l; i++ ){     // i is how many letters we pass by
+            for( int j = 0; j <= i; j++ ){ // j is internal length in (0~i)
+                if( (  existMap[i-j] && dict.contains(s.substring(i-j,i))  )   )
+                    existMap[i] = true;
+            }
+            if(  existMap[i]  ){
+                String secondHalf = s.substring(i);
+        
+                if( dict.contains(secondHalf) )
+                    return true;
+            } 
+        }
+        return false;
+    }
+    */
+     
+    
+    
+/*
+    // Bad version : recursive  cannot used visited value due to value-already-on-stack, even though I store possible duplicate value as code proceed.
+    // need refactor to reuse them.
+    HashSet<String> set = new HashSet<>();
+    
+    public boolean wordBreak(String s, List<String> wordDict) {
+         
+        set.addAll(wordDict);
+        return wordBreakHelper( s, set );
+    }
+    
+    private boolean wordBreakHelper( String s, HashSet<String> set ){
+        boolean res = false;
+        int len = s.length();
+        if( len == 0 )
+            return true;
+        
+        for( int i = 0; i <= len; i++ ){
+            String firstHalf = s.substring(0,i);
+            String secondHalf = s.substring(i,len);
+            if( set.contains(firstHalf) ){
+               
+                if( set.contains(secondHalf) ){    // intended to used already visited value, but due to stack-store nature, enven though we add duplicate value, we cannot use it.
+                    return true;
+                }else{
+                    res = wordBreakHelper( secondHalf, set );
+                    set.add(secondHalf);           // intended to add possible duplicate value to set, for later use, however, since that value has already calculated out by old 'set', so it doesnot work.
+                    if( res ) return true;
+                }
+                
+                
+                
+            }else{
+                continue;
+            }
+            
+        }
+        
+        return false;
+       
+    }
+*/
 }
