@@ -1,7 +1,7 @@
 class Solution {
 
- /*   
-    // version 1: BFS
+  /*
+    // version 1: BFS with a memo, avoiding duplicate visit
     public boolean wordBreak(String s, List<String> wordDict) {
         Set<String> wordDictSet=new HashSet(wordDict);
         Queue<Integer> queue = new LinkedList<>();
@@ -9,7 +9,7 @@ class Solution {
         queue.add(0);
         while (!queue.isEmpty()) {
             int start = queue.remove();
-            if (visited[start] == 0) {
+            if (visited[start] == 0) {     // ensure duplicate visited will be avoided
                 for (int end = start + 1; end <= s.length(); end++) {
                     if (wordDictSet.contains(s.substring(start, end))) {
                         queue.add(end);
@@ -23,11 +23,38 @@ class Solution {
         }
         return false;
     }
-*/
+    
+    */
+
+    /*
+        
+   // version recursion with memo:
+    public boolean wordBreak(String s, List<String> wordDict) {
+        return word_Break(s, new HashSet(wordDict), 0, new Boolean[s.length()]);
+    }
+    public boolean word_Break(String s, Set<String> wordDict, int start, Boolean[] memo) {
+        if (start == s.length()) {
+            return true;
+        }
+        if (memo[start] != null) {
+            return memo[start];
+        }
+        for (int end = start + 1; end <= s.length(); end++) {
+            if (wordDict.contains(s.substring(start, end)) && word_Break(s, wordDict, end, memo)) {
+                return memo[start] = true;
+            }
+        }
+        return memo[start] = false;
+    }
+    */
+        
+/*
     
     // version 2 : DP - based on version 1
+    //  dp[i] means: from 0 to i, whether or not the substring is exist
     public boolean wordBreak(String s, List<String> wordDict) {
         Set<String> wordDictSet=new HashSet(wordDict);
+        
         boolean[] dp = new boolean[s.length() + 1];
         dp[0] = true;
         for (int i = 1; i <= s.length(); i++) {
@@ -40,6 +67,9 @@ class Solution {
         }
         return dp[s.length()];
     }
+    */
+        
+        
     /*
     // version 3: using visited value, avoid duplicate visit
     public boolean wordBreak(String s, List<String> wordDict) {
@@ -71,14 +101,13 @@ class Solution {
      
     
     
-/*
-    // Bad version : recursive  cannot used visited value due to value-already-on-stack, even though I store possible duplicate value as code proceed.
-    // need refactor to reuse them.
-    HashSet<String> set = new HashSet<>();
-    
+
+    // version 5: recursive  
+    HashMap<String, Boolean> memo;
     public boolean wordBreak(String s, List<String> wordDict) {
-         
+        HashSet<String> set = new HashSet<>();
         set.addAll(wordDict);
+        memo = new HashMap<String, Boolean>();
         return wordBreakHelper( s, set );
     }
     
@@ -88,29 +117,28 @@ class Solution {
         if( len == 0 )
             return true;
         
+        if( memo.containsKey(s) )
+            return memo.get(s);
+        
         for( int i = 0; i <= len; i++ ){
             String firstHalf = s.substring(0,i);
             String secondHalf = s.substring(i,len);
             if( set.contains(firstHalf) ){
-               
-                if( set.contains(secondHalf) ){    // intended to used already visited value, but due to stack-store nature, enven though we add duplicate value, we cannot use it.
+                if( set.contains(secondHalf) ){ 
+                    memo.put(s,true);
                     return true;
                 }else{
                     res = wordBreakHelper( secondHalf, set );
-                    set.add(secondHalf);           // intended to add possible duplicate value to set, for later use, however, since that value has already calculated out by old 'set', so it doesnot work.
-                    if( res ) return true;
-                }
-                
-                
-                
-            }else{
-                continue;
+                    if( res ) {
+                        memo.put(s,true);
+                        return true;
+                    }
+                } 
             }
-            
         }
-        
+        memo.put(s,false);
         return false;
        
     }
-*/
+
 }
