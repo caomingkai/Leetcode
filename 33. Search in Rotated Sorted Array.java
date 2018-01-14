@@ -1,7 +1,4 @@
-/*
-[6 7 8 9 0 1 2 3 4 5   ]
 
-*/
 
 /*
 // version 1:  nums[s] < nums[m] can determine front/back is sorted
@@ -47,9 +44,15 @@ class Solution {
 
 */
 
-
+/*
 // version 2:  1 - find out the MinIndex
 //             2 - compare target with the last element 
+
+// KEY IDEA: 
+// 1. first compare target with breaking point
+// 2. if larger than breaking point, located in first half part
+//    if smaller than breaking point, located in second half part
+
 class Solution {
     public int search(int[] nums, int target) {
         
@@ -81,3 +84,4 @@ class Solution {
         return start;
     }
 }
+*/
