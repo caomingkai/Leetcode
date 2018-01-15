@@ -1,5 +1,62 @@
 
 
+class Solution {
+    public int search(int[] nums, int target) {
+        if( nums == null || nums.length == 0 )
+            return -1;
+        
+        int minIdx = findMinIdx( nums );
+        int n = nums.length;
+        if( target == nums[n-1] ) 
+            return n-1;
+        int l = target > nums[n-1] ? 0 : minIdx;
+        int r = target > nums[n-1] ? minIdx-1 : n-1;
+        
+        while( l <= r ){
+            int m = l + ((r-l)>>1);
+            if( nums[m] == target )
+                return m;
+            else if( nums[m] > target )
+                r = m-1;
+            else 
+                l = m+1;
+        }
+        return -1;
+        
+    }
+    
+    
+        //     0 1 2 3 4 5 6 7
+        //   [ 5 6 7 8 9 0 1 2  ]
+    //        l   r   m
+    //        0   7   3  =8 > 5  l = m+1=4
+    //        4   7   5  =0 < 9  r = m = 5
+    //        4   5   4  =9 = 9  r = m = 4
+    //        4   4   4  
+
+    /*
+    nums[m] < nums[r]    r = m
+    nums[m] > nums[r]    l = m+1
+    cannot exist nums[m] == nums[r], since we round down to an integer
+    if we round-down, it could be nums[m] == nums[l], but never nums[m] == nums[r]
+    */
+    
+    private int findMinIdx( int[] nums){
+        int l = 0;
+        int r = nums.length - 1;
+        while( l < r ){
+            int m = l + (( r - l) >> 1);   // when only 2 elements left, the left one will be min
+            if( nums[m] < nums[r] )
+                r = m;
+            else
+                l = m+1;    
+        }
+        return l;
+    }
+    
+}
+
+
 /*
 // version 1:  nums[s] < nums[m] can determine front/back is sorted
 class Solution {
@@ -73,7 +130,8 @@ class Solution {
         }
         return -1;
     }
-
+    
+    //   [ 5 6 7 8 9 0 1 2 3 ]
     public int findMinIdx(int[] nums) {
         int start = 0, end = nums.length - 1;
         while (start < end) {
