@@ -79,10 +79,9 @@ class Solution {
         else{
             for( int item: nums ){
                 if( !prefix.contains(item) ){
-                    List<Integer> tempList = new ArrayList<>(prefix);
-                    tempList.add(item);
-                    backtrack( nums, tempList, lvl+1, res);
-                    tempList.remove(tempList.size() - 1 );
+                    prefix.add(item);
+                    backtrack( nums, prefix, lvl+1, res);
+                    prefix.remove(prefix.size() - 1 );
                 }
             }
         }
