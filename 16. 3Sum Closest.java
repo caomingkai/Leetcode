@@ -1,32 +1,40 @@
 class Solution {
     public int threeSumClosest(int[] nums, int target) {
-        
-        // no need considering edge case
-        
-        // general case
-
-        int l = nums.length;
-        int res = nums[0] + nums[1] + nums[l-1];
-        
         Arrays.sort(nums);
-        
-        for( int a = 0; a < l-1; a++ ){
-            int b = a+1;
-            int c = l-1;
-            while( b < c ){
-                int sum = nums[a] + nums[b] + nums[c];
-                if( sum < target )
-                    b++;
-                else if( sum > target )
-                    c--;
-                else
-                    return sum;
+        int sum = nums[0] + nums[1] + nums[nums.length - 1];
+        int closestSum = sum;  // 维护一个当前最小sum，在遍历过程中有triplet比该值还要近的，更新之
+
+        for(int i = 0; i < nums.length - 2; i++){
+            
+            if(i==0 || nums[i]!=nums[i-1]){
+                int left = i + 1, right = nums.length - 1;
                 
-                if( Math.abs(res-target) > Math.abs(sum-target) )
-                    res = sum;
+                while(left < right){
+                    
+                    sum = nums[left] + nums[right] + nums[i];
+                    if(sum < target){
+                        //move closer to target sum.
+                        while(left<right && nums[left] == nums[left+1]){
+                            left++;
+                        }
+                        left++;
+                    }else if(sum > target){
+                        //move closer to target sum.
+                        while(left<right && nums[right] == nums[right-1]){
+                            right--;
+                        }
+                        right--;
+                    }else{
+                        return sum;
+                    }
+                    //update the closest sum if needed.
+                    if(Math.abs(target - sum) < Math.abs(target - closestSum)){
+                        closestSum = sum;
+                    }
+                }
             }
+
         }
-        
-        return res;
+        return closestSum;
     }
 }
