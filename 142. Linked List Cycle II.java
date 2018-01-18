@@ -28,42 +28,37 @@
  -5- ====>  L1 = C - L2
 */
 public class Solution {
-    public ListNode detectCycle(ListNode head) {
+    public ListNode detectCycle( ListNode head ){
+    
+        if( head == null ) return null;
         
-        if( head == null )
-            return null;
+        ListNode meet = findMeetingPoint(head);
+        if( meet == null ) return null;
         
-        ListNode meetingPnt = getMeetingPnt( head );
-        if( meetingPnt == null )
-            return null;
-        
-        ListNode ptr1 = head;
-        ListNode ptr2 = meetingPnt;
-        
-        while( ptr1 != ptr2 ){
-            ptr1 = ptr1.next;
-            ptr2 = ptr2.next;
+        ListNode p1 = head;
+        ListNode p2 = meet;
+        while( p1 != p2 ){
+            p1 = p1.next;
+            p2 = p2.next;
         }
-            
-        return ptr1;
+        
+        return p1;
     }
     
-    
-    private ListNode getMeetingPnt( ListNode head ){
-        ListNode slow = head;
-        ListNode fast = head;
+    private ListNode findMeetingPoint( ListNode head){
+        ListNode res = null;
         
-        while( fast != null ){
-            slow = slow.next;
-            if( fast.next != null )
-                fast = fast.next.next;
-            else
-                break;
+        ListNode s = head;
+        ListNode f = head;
+        
+        while( f.next != null ){
+            s = s.next;
+            f = f.next.next;
             
-            if( slow == fast )
-                return slow;
+            if( f == null ) break;
+            if( f == s ) return f;
         }
         
-        return null;
+        return res;
     }
 }
