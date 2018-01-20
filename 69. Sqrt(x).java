@@ -21,6 +21,7 @@ class Solution {
     }
     */
     
+    /*
     // version 2:  bit manipulation
     public int mySqrt(int x) {
         long ans = 0;
@@ -34,6 +35,21 @@ class Solution {
         }
         return (int)ans;
     }   
+    */
+    
+    // version 2.1 : no need for long, int is ok
+    public int mySqrt(int x) {
+        int ans = 0; // no need to define as "long"
+        int bit = 1 << 15; // no need to define as "long"
+        while (bit > 0) {
+            ans |= bit;
+            if (ans > x / ans) {
+                ans ^= bit; 
+            }
+            bit >>= 1;
+        }
+        return ans;
+    }
     
     /*
     public int mySqrt(int x) {
