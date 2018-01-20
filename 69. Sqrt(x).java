@@ -2,6 +2,18 @@
 
 
 class Solution {
+    
+    
+
+    
+    public int mySqrt(int x) {
+        long r = x;
+        while ( r*r > x )
+            r = (r + x/r) / 2;
+        return (int) r;
+    }
+
+    
     /*
     // version 1: Binary Search
     public int mySqrt(int x) {
@@ -21,6 +33,7 @@ class Solution {
     }
     */
     
+    
     /*
     // version 2:  bit manipulation
     public int mySqrt(int x) {
@@ -37,6 +50,8 @@ class Solution {
     }   
     */
     
+
+    /*
     // version 2.1 : no need for long, int is ok
     public int mySqrt(int x) {
         int ans = 0; // no need to define as "long"
@@ -51,16 +66,10 @@ class Solution {
         return ans;
     }
     
-    /*
-    public int mySqrt(int x) {
-        if( x == 0 || x == 1 )
-            return x;
-        
-        int half = x/2;
-        
-        return bs( 1, half, x );
-    }
     */
+    
+    
+    
     
     /*
     target : 8
