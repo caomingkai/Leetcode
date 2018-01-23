@@ -14,9 +14,24 @@ version 1.  one-end BFS  -- graph
     traverse by level, whenever a letter change, level=level+1
     words transform:   hit -> hot -> lot -> log -> cog
               level:    1      2      3      4      5
-
+            
+            
+//  --- 为什么BFS要快？ 为什么DFS会超时？？
+//  --- 因为如果存在有环的情况：
+//     -- BFS + visted[] 仅遍历一边数组就能找到最短路径 （ 长度为‘1’ 的变， 垂挂下来，找队短路径 ）
+//     -- DFS 则会因为环的存在，对图中的点进行重复遍历
+//  "aaa"
+//  "abe"
+//  ["aba","eaa","abe","eba"]
+//   如下图： 
+//
+//       /------------ aba -------\
+//    aaa               |         abe
+//       \--eaa - eba --|
+//
+//==============================================
 */
-/*
+
 class Solution {
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
         if( wordList == null || wordList.size() == 0 )
@@ -52,7 +67,7 @@ class Solution {
         return 0;
     }
 }
-*/
+
 
 /*
 ==============================================
@@ -71,6 +86,8 @@ the middle. The motivation is that b^(d/2) + b^(d/2) is much less than b^d. b is
 3. keep two sets grow equally, this way can achieve better time complexity
 
 */
+
+/*
 class Solution {
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
         if( wordList == null || wordList.size() == 0 )
@@ -117,28 +134,42 @@ class Solution {
             begSet = temp;
             cnt++;     // for next loop
         }
-        
         return 0;
     }
     
 
 }
-
-
+*/
 
 
 /*
 
-==============================================
+//==============================================
 //  version 3: DFS --- TLE 
-==============================================
+//  
+//  "aaa"
+//  "abe"
+//  ["aba","eaa","abe","eba"]
+//   如下图： 
+//
+//  --- 为什么DFS会超时？？
+//  --- 因为如果存在有环的情况： 
+//     -- BFS + visted[] 仅遍历一边数组就能找到最短路径 （ 长度为‘1’ 的变， 垂挂下来，找队短路径 ）
+//     -- DFS 则会因为环的存在，对图中的点进行重复遍历
+//
+//       /------------ aba -------\
+//    aaa               |         abe
+//       \--eaa - eba --|
+//
+//==============================================
 
 class Solution {
     
     private Set<String> wordSet;
-    private Set<Set<String>> resList= new HashSet<>();
     private Set<String> prefix = new HashSet<>();
+    private Set<Set<String>> resList = new HashSet<>(); // used for test
     private int res;
+    private int depthLimit;
     
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
         if( wordList == null || wordList.size() == 0 )
@@ -148,44 +179,48 @@ class Solution {
         if(!wordSet.contains(endWord))
             return 0;
         
+        depthLimit = wordList.size();
         res = Integer.MAX_VALUE;
         int l = beginWord.length();
+        prefix.add(beginWord);
+        
         for( int i = 0; i < l; i++ )
-            backtrack(beginWord, i, endWord ) ; 
-
+            backtrack(beginWord, i, endWord );
+        
+        // System.out.println(resList);
         return res==Integer.MAX_VALUE ? 0 : res;
     }
     
-    // change the letter on position "pos" of String temp
-    private void backtrack( String temp, int pos, String target ){
-        if( temp.equals(target) ){      //  we don't put it outside, in case 
-            res = Math.min( res, prefix.size()+1 );
-            return;
-        }   
+    
+    // change the letter on position "pos" of String str
+    private void backtrack( String str, int pos, String target ){
+        int l = target.length();
+        if( prefix.size() > depthLimit )  return;        // 进行深度限制，最短路径不可能比字典长度还长
         
         for( char c = 'a'; c <= 'z'; c++ ){
-            String newTemp = temp.substring(0,pos) + c + temp.substring(pos+1);
-            if( newTemp.equals(temp) )            // avoid wordList contains beginWord, don't count it in
+            String newTemp = str.substring(0,pos) + c + str.substring(pos+1);
+            if( newTemp.equals(str) )            // avoid wordList contains beginWord, don't count it in
                 continue;
             
+            if( newTemp.equals(target) ){ 
+                    prefix.add(newTemp);
+                    resList.add(new HashSet<>(prefix) );  // used for test
+                    res = Math.min( res, prefix.size() );
+                    prefix.remove(newTemp);
+                    return;
+            } 
+            
             if( wordSet.contains(newTemp) ){
-                if( prefix.add( newTemp )){   
-                    for( int i = 0; i < target.length(); i++ ){
-                        
-                        // if we want to use the if statement, in case "a", "b" ["a", "b","c"], 
-                        // we have to put stopping contidion before if condition
-                        
-                        // if( i != pos ){         // don't need to modify the position just beenmodified
-                                                   
+                if( prefix.add( newTemp ) ){   
+                    for( int i = 0; i < l; i++ ){
+                                              // we have to put stopping contidion before if condition
+                        if( i != pos )        // don't need to modify the position just beenmodified
                             backtrack( newTemp, i, target );
-                        // }
                     }
                     prefix.remove( newTemp );
-                }
-                
+                }                
             }
         }
-
     }
 }
 */
