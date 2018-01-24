@@ -18,7 +18,7 @@ public class Solution {
     }
     
     
-    
+    // 来回换角色体验一下该函数工作方式： 每个人都想赢，想让对方输
     private boolean canIWinHelper(int total, int[] state, HashMap<String, Boolean> hashMap) {
         String curr=Arrays.toString(state);
         if (hashMap.containsKey(curr)) return hashMap.get(curr);   // 访问过，直接返回该结果
