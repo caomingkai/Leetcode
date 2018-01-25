@@ -1,4 +1,4 @@
- /*
+/*
  [3, 2，3], k = 2
  
  [1, 2, 3, 3, 3, 4, 5], avg =7
@@ -6,9 +6,7 @@
 t = sum/k  // 1 - check sum%k == 0
 max < t    // 2 - max < t
 
-
-1. using a hashmap to store window content, deciding the window moving ( or bucket array )
-2. using two pointers to limit the window
+     【【【  greedy + 回溯  】】】
 
 */
 class Solution {
@@ -32,9 +30,7 @@ class Solution {
             idx--;   // delete the solo value which itself is subSem
             k--;     // corresponding number of groups decrement by 1
         }
-        for( int i: nums )
-            System.out.print(i + " ");
-        System.out.println();
+
         // idx - we traverse the idx from back to front
         return canPartition( new int[k], idx, nums, subSum );
         
@@ -52,10 +48,7 @@ class Solution {
     private boolean canPartition(  int[] groups, int idx, int[] nums, int target ){
         if( idx < 0 )
             return true;
-        for( int item: groups ){
-            System.out.print(item + " ");
-        }            
-        System.out.println();
+         
         int selected = nums[idx];
         for( int i = 0; i < groups.length; i++ ){
             if( groups[i] + selected <= target ){
