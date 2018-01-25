@@ -28,11 +28,10 @@ class TwoSum {
 
 
 
-/*
+
 // version 2:  put more calculation on find()
-//             HashMap fastest!
+//          Only HashMap , no need for ArrayList
 public class TwoSum {
-    private List<Integer> list = new ArrayList<Integer>();
     private Map<Integer, Integer> map = new HashMap<Integer, Integer>();
 
     // Add the number to an internal data structure.
@@ -40,25 +39,25 @@ public class TwoSum {
 	    if (map.containsKey(number)) map.put(number, map.get(number) + 1);
 	    else {
 	        map.put(number, 1);
-	        list.add(number);
 	    }
 	}
 
     // Find if there exists any pair of numbers which sum is equal to the value.
 	public boolean find(int value) {
-	    for (int i = 0; i < list.size(); i++){
-	        int num1 = list.get(i), num2 = value - num1;
-	        if ((num1 == num2 && map.get(num1) > 1) || (num1 != num2 && map.containsKey(num2))) return true;
+        for ( Integer num1 : map.keySet() ){
+	        int num2 = value - num1;
+	        if ((num1 == num2 && map.get(num1) > 1) || (num1 != num2 && map.containsKey(num2))) 
+                return true;
 	    }
 	    return false;
 	}
 }
 
-*/
 
 
 
 
+/*
 // version 3: put more calculation on find()
 //            HashSet
 //            two pointer
@@ -78,18 +77,18 @@ class TwoSum {
     }
     
     public boolean find(int value) {
-        /*
-        //---- HashSet version 
-        Set<Integer> set = new HashSet<>();
-        for( Integer item: list ){
+
+//         //---- HashSet version 
+//         Set<Integer> set = new HashSet<>();
+//         for( Integer item: list ){
             
-            if( set.contains(item) )
-                return true;
-            else
-                set.add( value - item );
-        }
-        return false;
-        */
+//             if( set.contains(item) )
+//                 return true;
+//             else
+//                 set.add( value - item );
+//         }
+//         return false;
+
         
         //-----  two pointers
         Collections.sort(list);
@@ -109,7 +108,7 @@ class TwoSum {
     }
 }
 
-
+*/
 
 
 /**
