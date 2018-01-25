@@ -1,47 +1,36 @@
-/*
+
 // version 1: maintain two arraylist: one for stack, one for current min value.
 public class MinStack {
-    int top;
-    ArrayList<Integer> arr;  // store elements
-    ArrayList<Integer> min;  // store min for current length array
+    private Stack<Integer> s1 = new Stack<>();
+    private Stack<Integer> s2 = new Stack<>();
     
-    public MinStack() {
-        arr = new ArrayList<Integer>();
-        min = new ArrayList<Integer>();
-        top = -1;
-    }
+    /** initialize your data structure here. */
+    public MinStack() {}
     
     public void push(int x) {
-        arr.add(x);
-        if( min.size() == 0 ){
-            min.add( x );
-        }else{
-            int curMin = min.get(top);
-            if( x < curMin ){
-                min.add(x);
-            }else{
-                min.add(curMin);
-            }
-        }
-        top++;
+        s1.push(x);
+        if (s2.isEmpty() || s2.peek() >= x) s2.push(x);
     }
     
     public void pop() {
-        arr.remove(top);
-        min.remove(top);
-        top--;
+        // Cannot write like the following:
+        // if (s2.peek() == s1.peek()) s2.pop();
+        // s1.pop();
+        int x = s1.pop();
+        if (s2.peek() == x) s2.pop();
     }
     
     public int top() {
-        return arr.get(top);
+        return s1.peek();
     }
     
     public int getMin() {
-        return min.get(top);
+        return s2.peek();
     }
 }
-*/
 
+
+/*
 // version 2: GOOD design
 // design a class Node, containing : value, current min, nextNode fields.
 public class MinStack {
@@ -83,6 +72,7 @@ public class MinStack {
     }
 }
 
+*/
 
 /**
  * Your MinStack object will be instantiated and called as such:
