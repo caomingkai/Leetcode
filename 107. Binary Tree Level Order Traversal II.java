@@ -8,32 +8,36 @@
  * }
  */
 
-// version 1: iterative ( queue )
-public class Solution {
+/*
+class Solution {
+    
+    // BFS with Queue
     public List<List<Integer>> levelOrderBottom(TreeNode root) {
-
-        List<List<Integer>> result = new ArrayList<List<Integer>>();
-        if(root==null) return result;
-        Queue<TreeNode> q = new LinkedList<>();
-        q.add(root);
-        while(q.size()>0){
-            List<Integer> list = new ArrayList<>();
-            int size = q.size();
-            for(int i=0; i<size; i++){
-                TreeNode node = q.poll();
-                list.add(node.val);
-                if(node.left!=null) q.add(node.left);
-                if(node.right!=null) q.add(node.right);
+        
+        List<List<Integer>> s = new LinkedList<List<Integer>>(); // Stack: use as return var
+        Queue<TreeNode> q = new LinkedList<>();    // Queue: store a certain level of Nodes
+        
+        // edge case:
+        if(root == null) return s;
+            
+        // general case:
+        q.offer(root);
+        while(q.size() > 0){
+            List<Integer> lvlNd = new LinkedList<>();
+            int num = q.size();
+            for(int i=0; i<num; i++){
+                TreeNode temp = q.poll();
+                lvlNd.add(temp.val);
+                if(temp.left != null) q.offer(temp.left);
+                if(temp.right!= null) q.offer(temp.right);
             }
-            result.add(0,list);
+            s.add(0,lvlNd);
         }
-        return result;
-
+        return s;
     }
 }
 
-/*
-// version 2: recursive( DFS )
+*/
 public class Solution {
         public List<List<Integer>> levelOrderBottom(TreeNode root) {
             List<List<Integer>> wrapList = new LinkedList<List<Integer>>();
@@ -46,10 +50,16 @@ public class Solution {
             if(level >= list.size()) {
                 list.add(0, new LinkedList<Integer>());
             }
+            
             levelMaker(list, root.left, level+1);
             levelMaker(list, root.right, level+1);
-            list.get(list.size()-level-1).add(root.val);
+            list.get(list.size()-level-1).add(root.val);  // add to current level's next level
+            /*
+                |__|
+                |__| <-- level
+                |__| <-- root's level
+                |__|
+                |__|
+            */
         }
-}
-
-*/
+    }
