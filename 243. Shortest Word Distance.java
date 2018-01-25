@@ -1,21 +1,28 @@
 // version 1 : O(n)
-class Solution {
-    public int shortestDistance(String[] words, String word1, String word2) {
-        int i1 = -1, i2 = -1;
-        int minDistance = words.length;
-        int currentDistance;
-        for (int i = 0; i < words.length; i++) {
-            if (words[i].equals(word1)) {
-                i1 = i;
-            } else if (words[i].equals(word2)) {
-                i2 = i;
-            }
 
-            if (i1 != -1 && i2 != -1) {
-                minDistance = Math.min(minDistance, Math.abs(i1 - i2));
+/*
+ equals to find out the shortest distance from all "|" below:
+    [ "A","B","C","A","D","B","F",A","E","F","G","B"]
+       |   |       |       |      |               |
+*/
+
+
+public class Solution {
+    public int shortestDistance(String[] words, String word1, String word2) {
+        int index1 = -1, index2 = -1;
+        int res = Integer.MAX_VALUE;
+        for(int i = 0; i < words.length; i++) {
+            if(words[i].equals(word1)) {
+                index1 = i;
+                if(index2 != -1 ) res = Math.min(res, Math.abs(index1 - index2));
+            }
+            
+            if(words[i].equals(word2)) {
+                index2 = i;
+                if(index1 != -1 ) res = Math.min(res, Math.abs(index1 - index2));
             }
         }
-        return minDistance;
+        return res;
     }
 }
 
