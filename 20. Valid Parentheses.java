@@ -28,57 +28,23 @@ public class Solution {
 // version 2: no need for a Map
 // Stack.push() --- push its counterpart,  next time encouter its counterpart, see if they are the same
 public class Solution {
-public boolean isValid(String s) {
-    Stack<Character> stack = new Stack<Character>();
-    for (char c : s.toCharArray()) {
-        if (c == '(')
-            stack.push(')');
-        else if (c == '{')
-            stack.push('}');
-        else if (c == '[')
-            stack.push(']');
-        else if (stack.isEmpty() || stack.pop() != c)
-            return false;
-    }
-    return stack.isEmpty();
-}
-}
-
-/*
-// version 3: no need for Map and Stack( use char[] instead )
-// each time encouter a ')',']','}', make the pointer(initially to the last) one step backward 
-public class Solution {
     public boolean isValid(String s) {
-        char[] chars = s.toCharArray();
-        char[] stack = new char[chars.length];
-        int top = -1;
-        char currChar;
-        for(int i = 0; i < chars.length; i++) {
-            currChar = chars[i];
-            switch(currChar) {
-                case '[':
-                case '{':
-                case '(':
-                    stack[++top] = currChar;
-                    break;
-                default:
-                    if(top == -1) return false;
-                    switch(currChar) {
-                     case ']':
-                        if(stack[top--] != '[') return false;
-                        break;
-                    case '}':
-                        if(stack[top--] != '{') return false;
-                        break;
-                    case ')':
-                        if(stack[top--] != '(') return false;
-                        break;
-                    default:
-                        return false;
-                    }
-            }
+        Stack<Character> stack = new Stack<Character>();
+        for (char c : s.toCharArray()) {
+            if (c == '(')
+                stack.push(')');
+            else if (c == '{')
+                stack.push('}');
+            else if (c == '[')
+                stack.push(']');
+            else{
+                if (stack.isEmpty() )
+                    return false;
+                char buddy = stack.pop();
+                if (buddy != c) 
+                    return false;
+            } 
         }
-        return top == -1;
+        return stack.isEmpty();
     }
 }
-*/
