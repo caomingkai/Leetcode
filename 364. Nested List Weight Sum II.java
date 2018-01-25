@@ -50,6 +50,8 @@ Sum3: 5+6 = 11
 class Solution {
     /*
     // version 1: find out the level info, then do the multiplication
+    // 用一个 arrylist 保存每层遍历的和； 最后再逆向乘相应的weight
+    
     public int depthSumInverse(List<NestedInteger> nestedList) {
         int res = 0;
         Queue<List<NestedInteger>> q = new LinkedList<>();
@@ -83,20 +85,20 @@ class Solution {
     
     // version 2: no multiplication -> just add mulitple times
     public int depthSumInverse(List<NestedInteger> nestedList) {
-    int unweighted = 0, weighted = 0;
-    while (!nestedList.isEmpty()) {
-        List<NestedInteger> nextLevel = new ArrayList<>();
-        for (NestedInteger ni : nestedList) {
-            if (ni.isInteger())
-                unweighted += ni.getInteger();
-            else
-                nextLevel.addAll(ni.getList());
+        int unweighted = 0, weighted = 0;
+        while (!nestedList.isEmpty()) {
+            List<NestedInteger> nextLevel = new ArrayList<>();
+            for (NestedInteger ni : nestedList) {
+                if (ni.isInteger())
+                    unweighted += ni.getInteger();
+                else
+                    nextLevel.addAll(ni.getList());
+            }
+            weighted += unweighted;
+            nestedList = nextLevel;
         }
-        weighted += unweighted;
-        nestedList = nextLevel;
+        return weighted;
     }
-    return weighted;
-}
 }
 
 
