@@ -7,46 +7,60 @@
  * }
  */
 
-
-
-// version 1: good version, in-place
+/*
+            1 -> 2 -> 3 -> 4 -> 5 -> null
+    
+    null <- 1
+    prev  curr next
+    
+    
+    while( cur != null )
+        next = cur.next
+        cur.next = pre;
+        cur = next;
+        pre = cur;
+*/
 class Solution {
+    
+    /*
+    // 1- iterative version
     public ListNode reverseList(ListNode head) {
         ListNode prev = null;
         ListNode curr = head;
-        while (curr != null) {
-            ListNode nextTemp = curr.next;
-            curr.next = prev;
-            prev = curr;
-            curr = nextTemp;
-        }
-        return prev;
-    }
-}
-
-/*
-// version 2: bad version, due to O(n) space complexity
-class Solution {
-    public ListNode reverseList(ListNode head) {
+        ListNode next = null;
         
-        if( head == null )
+        while( curr != null ){
+            next = curr.next;
+            curr.next = prev;
+            if( next == null ) break;
+            prev = curr;
+            curr = next;
+        }
+        return curr;
+    }
+    */
+    
+    
+    // 2- recursion version 
+    public ListNode reverseList(ListNode head) {
+        if (head == null)
             return null;
         
-        
-        ListNode ptr1 = head;
-        ListNode ptr2 = null;
-        
-        while( ptr1 != null ){
-            ListNode shadow = new ListNode( ptr1.val );
-            shadow.next = ptr2;
-            ptr1 = ptr1.next;
-            ptr2 = shadow;
+        return h ( null, head);
+    }
+    
+    /*                   1 -> 2 -> 3 -> 4
+            1st: null <- 1  + h(1, 2)
+            2nd  null <- 1 <- 2 + h(2, 3)
+    */
+    private ListNode h(ListNode prev, ListNode curr){
+        if( curr.next == null ){
+            curr.next = prev;
+            return curr;
         }
-        head = ptr2;
         
-        
-        return head;
-        
+        ListNode next = curr.next;
+        curr.next = prev;
+        return h( curr, next );
     }
 }
-*/
