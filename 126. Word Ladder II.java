@@ -5,7 +5,7 @@
 
 
 version 1: BFS --- store all paths till meeting endWord ( means paths till this level are all shortest)
-
+    0. 这种方案，空间使用非常大（每到一层，存储由root到该层所有的 valid path ）
     1. need a queue to store each possible paths from beginWord
     2. spread out from beginWord, by level, toward the endWord
         2.1 nodes on current level can be shared by last level's nodes
@@ -34,7 +34,6 @@ class Solution {
         int l = beginWord.length();
         boolean breakFlag = false;
        
-        
         while( !q.isEmpty() ){
             Set<String> toBeDeleted = new HashSet<>();
             int size = q.size();                        // handle by level
@@ -77,8 +76,9 @@ class Solution {
 /*
 // Version 2.1  -- BFS 
 // Key Point  :  1. 从 end 发散向前找 start，过程中存储每个点的后驱节点，用HashMap<String, List<String>> 存
+//                  因此这种方案，空间使用非常不大（只存后驱节点，找的时候起点只有一个，从前往后找）
 //               2. 最后backtrack 所有valid路径
-
+                
 class Solution {
 
     class StringWithLevel {  
