@@ -53,7 +53,7 @@ class Trie {
         return curNode != null;
     }
     
-    
+    /** Returns if we successfully delete such a word */
     public boolean delete( String word ){
         if( !search(word) )
             return false;
@@ -70,7 +70,8 @@ class Trie {
             }
         }
         
-        // here means: the last char of word has trailing Nodes, BUT itself has to set 'isEnd=false'
+        // 能运行至此处，表明Trie中还有别的prefix需要用到word的所有letter前缀；
+        // 然而，不同的却是，这个单词不会再存在于trie中了，所以isWord=false
         curNode.isWord = false;
         return true;
     }
