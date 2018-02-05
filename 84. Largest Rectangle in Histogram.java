@@ -1,5 +1,8 @@
 
 /*
+http://blog.csdn.net/abcbc/article/details/8943485
+http://www.cnblogs.com/higerzhang/p/4107268.html
+
 首先，最容易想到的是暴力法：
     将直方图的数组记做a[0…size-1]；
     最原始的方法是由a[i]为高度，向两边找比a[i]高度高的矩形。
