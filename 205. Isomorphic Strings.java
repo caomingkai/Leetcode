@@ -1,5 +1,41 @@
 class Solution {
     
+    
+    // version 1: 非常棒的解法---pattern
+    /*
+        1. 从string的头部开始，对遇到的每一个字母分配编号，编号从0开始分配
+        2. 若后边遇到之前visited过的字母，分配相同编号
+        3. 用map来存之前是否visited过字母的 <字母：编号> pair
+    */
+    public boolean isIsomorphic(String s, String t) {
+        if( s == null || s.length() == 0 )
+            return true;
+    
+        int sCode = encode(s);
+        int tCode = encode(t);
+        return sCode == tCode;
+    }
+    
+    private int encode( String s ){
+        Map<Character, Integer> map = new HashMap<>();
+        char[] strArr = s.toCharArray();
+        int res = 0;
+        
+        int code = 0;
+        int len = s.length();
+        for( int i = 0; i < len; i++ ){
+            char c = strArr[i];
+            if( map.containsKey(c) ){
+                res = 10*res + map.get(c);
+            }else{
+                res = 10*res + code;
+                map.put(c, code++);
+            }
+        }
+        return res;
+    }
+    
+    
     // KEY IDEA: 
     // 1 : two character in s don't point to same character in t
     // 2 : two character in t don't point to same character in s
@@ -57,6 +93,7 @@ class Solution {
     }
     */
     
+    /*
     // version 3: char array, default char is equavilent to 0
     public boolean isIsomorphic(String s, String t) {
 	        char[] map = new char[256];
@@ -76,5 +113,6 @@ class Solution {
 	        }
 	        return true;
     }
+    */
     
 }
