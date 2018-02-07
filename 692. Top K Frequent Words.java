@@ -49,6 +49,11 @@ class Solution {
 }
 */
     
+/*
+    PriorityQueue 即便提前声明了 capacity， 那也只是 initial capacity！
+    如果后边加入的元素数量大于capacity，capacity会持续增大。
+    ———— 并无卵用。。。
+*/
 class Solution {
     public List<String> topKFrequent(String[] words, int k) {
         Map<String, Integer> count = new HashMap();
