@@ -10,15 +10,14 @@ class QuickSort
     int partition(int arr[], int low, int high)
     {
         int pivot = arr[high]; 
-        int i = (low-1); // index of smaller element
+        int i = (low-1);           // 0-【关键点】 index of smaller element
         for (int j=low; j<high; j++)
         {
             // If current element is smaller than or
             // equal to pivot
-            if (arr[j] <= pivot)
-            {
+            if (arr[j] <= pivot)   // 1- 如果比pivot小，则自己跟自己换；但主要是为了第2条
+            {                      // 2- 如果比pivot大，跳过；再次遇到比pivot小的，在与第一个(i++)比pivot大的元素交换位置
                 i++;
- 
                 // swap arr[i] and arr[j]
                 int temp = arr[i];
                 arr[i] = arr[j];
