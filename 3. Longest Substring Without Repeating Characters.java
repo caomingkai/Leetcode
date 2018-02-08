@@ -6,9 +6,9 @@ public class Solution {
         // try to extend the range [i, j]
         for (int j = 0, i = 0; j < n; j++) {
             if (map.containsKey(s.charAt(j))) {
-                i = Math.max(map.get(s.charAt(j)), i); // ptr i always point to the first letter
-                                                       //    a b c d a b c a b
-                                                       //    |       |     | 
+                //  i 由中间重复的b已经更新(i=3)，等到最后一个‘a’时，如果还用get('a') = 1，会出现错误
+                i = Math.max(map.get(s.charAt(j)), i); //     "a b b a"
+                                                       //      0 1 2 3
             }
             ans = Math.max(ans, j - i + 1);
             map.put(s.charAt(j), j + 1);
