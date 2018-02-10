@@ -69,7 +69,8 @@ class Solution {
         return min == Integer.MAX_VALUE ? triangle.get(0).get(0) : min ;
     }
     */
-        
+     
+    /*
     // version 3: dp 1-dimension  int[ ]
     public int minimumTotal(List<List<Integer>> triangle) {
         if( triangle == null || triangle.size() == 0 || triangle.get(0).size() == 0 )
@@ -100,4 +101,19 @@ class Solution {
         }
         return min == Integer.MAX_VALUE ? triangle.get(0).get(0) : min ;
     }
+    */
+    
+    
+    // version 4: neat !! 在声明dp时候，多申请一位空间，避免了条件判断，
+    //  从而直接使用 recursion formular: dp[j] = Math.min(dp[j],dp[j+1])+triangle.get(i).get(j);
+    public int minimumTotal(List<List<Integer>> triangle) {
+        int[] dp = new int[triangle.size()+1];
+        for(int i=triangle.size()-1;i>=0;i--){
+            for(int j=0;j<triangle.get(i).size();j++){
+                dp[j] = Math.min(dp[j],dp[j+1])+triangle.get(i).get(j);
+            }
+        }
+        return dp[0];
+    }
+
 }
