@@ -1,3 +1,25 @@
+
+// version 1: LinkedHashMap + two scan
+public class Solution {
+    public int firstUniqChar(String s) {
+        
+        Map<Character, Integer> charFreq = new LinkedHashMap<>();
+        char[] sArr = s.toCharArray();
+        int len = sArr.length;
+        
+        for( char c : sArr )
+            charFreq.put( c, charFreq.getOrDefault(c, 0)+1 );
+        
+        for( int i = 0; i < len; i++ ){
+            if( charFreq.get(sArr[i]) == 1 )
+                return i;
+        }
+        return -1;
+    }
+}
+
+/*
+// version 2: hashmap + two scan
 public class Solution {
     public int firstUniqChar(String s) {
         
@@ -18,3 +40,4 @@ public class Solution {
         return -1;
     }
 }
+*/
