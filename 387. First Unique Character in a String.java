@@ -1,20 +1,24 @@
 
-// version 1: LinkedHashMap + two scan
+// version 1: one scan
 public class Solution {
     public int firstUniqChar(String s) {
-        
-        Map<Character, Integer> charFreq = new LinkedHashMap<>();
-        char[] sArr = s.toCharArray();
-        int len = sArr.length;
-        
-        for( char c : sArr )
-            charFreq.put( c, charFreq.getOrDefault(c, 0)+1 );
-        
-        for( int i = 0; i < len; i++ ){
-            if( charFreq.get(sArr[i]) == 1 )
-                return i;
+        int[] alphabet = new int[26];
+        Arrays.fill(alphabet, -1);
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (alphabet[c - 'a'] == -1) { // first time letter
+                alphabet[c - 'a'] = i;
+            } else {
+                alphabet[c - 'a'] = -2; //  mark as repeated letter
+            }
         }
-        return -1;
+        int first = s.length();
+        for (int index : alphabet) {
+            if (index >= 0 && index < first) {
+                first = index;
+            }
+        }
+        return first == s.length() ? -1 : first;
     }
 }
 
